@@ -15,6 +15,9 @@ if "taking_assessment" not in st.session_state:
 if 'disable_button' not in st.session_state:
     st.session_state.disable_button = False
 
+if 'assessment_completed' not in st.session_state:
+    st.session_state.assessment_completed = False
+
 # --- Helper to set a local background image ---
 def set_bg_local(image_path: str):
     with open(image_path, "rb") as img_file:
@@ -61,36 +64,41 @@ if st.button("Take Hunter Rank Assessment", key="hunter_rank_assessment", type="
         }
         current_rank = "E Rank"  # fetch from your backend in reality
 
-        
-        st.write("1️⃣ Assessing Physical Prowess")
-        bar1 = st.progress(0)
-        for i in range(100):
-            time.sleep(0.05)
-            bar1.progress(i + 1)
-        st.success("⚔️ Physical Prowess Assessed!")
+        if not st.session_state.assessment_completed:
+          st.write("1️⃣ Assessing Physical Prowess")
+          bar1 = st.progress(0)
+          for i in range(100):
+              time.sleep(0.05)
+              bar1.progress(i + 1)
+          st.success("⚔️ Physical Prowess Assessed!")
 
-        st.write("2️⃣ Analyzing Combat Skills")
-        bar2 = st.progress(0)
-        for i in range(100):
-            time.sleep(0.05)
-            bar2.progress(i + 1)
-        st.success("🎯 Combat Skills Analyzed!")
+          st.write("2️⃣ Analyzing Combat Skills")
+          bar2 = st.progress(0)
+          for i in range(100):
+              time.sleep(0.05)
+              bar2.progress(i + 1)
+          st.success("🎯 Combat Skills Analyzed!")
 
-        st.write("3️⃣ Calibrating Magical Aura")
-        bar3 = st.progress(0)
-        for i in range(100):
-            time.sleep(0.05)
-            bar3.progress(i + 1)
-        st.success("🌌 Magical Aura Calibrated!")
+          st.write("3️⃣ Calibrating Magical Aura")
+          bar3 = st.progress(0)
+          for i in range(100):
+              time.sleep(0.05)
+              bar3.progress(i + 1)
+          st.success("🌌 Magical Aura Calibrated!")
 
-        st.write("✅ All systems complete. Your Hunter rank has been updated!")
+          st.write("✅ All systems complete. Your Hunter rank has been updated!")
+          st.session_state.assessment_completed = True
+          with st.spinner("Please wait..."):
+            time.sleep(5)
+          st.rerun()
+        else:
+            
+          # Display Rank & Image
+          st.markdown(f"### Assessed Rank: **{current_rank}**")
+          st.markdown("#### You are an Assassin 🥷 type hunter!")
 
-        # Display Rank & Image
-        st.markdown(f"### Assessed Rank: **{current_rank}**")
-        st.markdown("#### You are an Assassin 🥷 type hunter!")
+          img = Image.open(RANK_IMAGES[current_rank])
+          st.image(img, width=600, caption=f"Rank: {current_rank}", use_container_width=True)
 
-        img = Image.open(RANK_IMAGES[current_rank])
-        st.image(img, width=600, caption=f"Rank: {current_rank}", use_container_width=True)
-
-        # Motivational Message
-        st.info("Just like Sung Jinwoo, every practice session makes you stronger!")
+          # Motivational Message
+          st.info("Just like Sung Jinwoo, every practice session makes you stronger!")
