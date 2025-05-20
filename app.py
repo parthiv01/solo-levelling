@@ -69,21 +69,21 @@ if st.button("Take Hunter Rank Assessment", key="hunter_rank_assessment", type="
           st.write("1️⃣ Assessing Physical Prowess")
           bar1 = st.progress(0)
           for i in range(100):
-              time.sleep(0.05)
+              time.sleep(0.03)
               bar1.progress(i + 1)
           st.success("⚔️ Physical Prowess Assessed!")
 
           st.write("2️⃣ Analyzing Combat Skills")
           bar2 = st.progress(0)
           for i in range(100):
-              time.sleep(0.05)
+              time.sleep(0.03)
               bar2.progress(i + 1)
           st.success("🎯 Combat Skills Analyzed!")
 
           st.write("3️⃣ Calibrating Magical Aura")
           bar3 = st.progress(0)
           for i in range(100):
-              time.sleep(0.05)
+              time.sleep(0.03)
               bar3.progress(i + 1)
           st.success("🌌 Magical Aura Calibrated!")
 
