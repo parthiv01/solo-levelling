@@ -57,7 +57,7 @@ if st.button("Take Hunter Rank Assessment", key="hunter_rank_assessment", type="
         RANK_IMAGES = {
             "F Rank": "images/f_rank.png",
             "E Rank": "images/e_rank.jpg",
-            "D Rank": "images/d_rank.png",
+            "D Rank": "images/d_rank.webp",
             "C Rank": "images/c_rank.png",
             "B Rank": "images/b_rank.png",
             "A Rank": "images/a_rank.png",
