@@ -63,7 +63,7 @@ if st.button("Take Hunter Rank Assessment", key="hunter_rank_assessment", type="
             "A Rank": "images/a_rank.png",
             "S Rank": "images/s_rank.png"
         }
-        current_rank = "E Rank"  # fetch from your backend in reality
+        current_rank = "D Rank"  # fetch from your backend in reality
 
         if not st.session_state.assessment_completed:
           st.write("1️⃣ Assessing Physical Prowess")
@@ -103,4 +103,5 @@ if st.button("Take Hunter Rank Assessment", key="hunter_rank_assessment", type="
 
           # Motivational Message
           # st.info("Be disciplined, focused, and never give up!")
-          st.info("Just like Sung Jinwoo, every practice session makes you stronger!")
+          # st.info("Just like Sung Jinwoo, every practice session makes you stronger!")
+          st.info("Congratulations Hunter, You are not the weakest now!")
