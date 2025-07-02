@@ -6,12 +6,17 @@ import os
 import base64
 import streamlit as st
 import streamlit.components.v1 as components
+from streamlit.components.v1 import html
 
 # --- Page config ---
 st.set_page_config(layout="wide", page_title="Solo Math Levelling")
 
+
 if "character" not in st.session_state:
     st.session_state.character = None
+
+if "fighting" not in st.session_state:
+    st.session_state.fighting = False
 
 if "taking_assessment" not in st.session_state:
     st.session_state.taking_assessment = False
@@ -35,6 +40,9 @@ if 'RANK_IMAGES' not in st.session_state:
         "E Rank": "images/e_rank.png",
         "F Rank": "images/f_rank.png"
     }
+
+
+
 
 # --- Helper to set a local background image ---
 def set_bg_local(image_path: str):
@@ -63,46 +71,47 @@ st.title("📈 Solo Math Levelling")
 
 if(not st.session_state.disable_button):
   # --- Trigger Button (always visible) ---
-  if st.button("Take Hunter Rank Assessment", key="hunter_rank_assessment", type="primary", disabled=st.session_state.disable_button) or st.session_state.taking_assessment:
-      
-      st.session_state.taking_assessment = True
+  if(st.session_state.fighting == False):
+    if (st.button("Take Hunter Rank Assessment 📝", key="hunter_rank_assessment", type="primary", disabled=st.session_state.disable_button) or st.session_state.taking_assessment):
+        st.audio("sounds/bg_sound.mp3", format="audio/mp3", start_time=0, autoplay=True, loop=True)
+        
+            
 
-      # --- Character Selection (only after button click) ---
-      choice = st.selectbox("Choose your character:", ["-- Select Character ⚔️ --", "Parth Dhawan"])
-      st.session_state.character = choice
+        st.session_state.taking_assessment = True
 
-      if st.session_state.character != "-- Select Character ⚔️ --":
-          # --- Rank Config ---
-          
+        # --- Character Selection (only after button click) ---
+        choice = st.selectbox("Choose your character:", ["-- Select Character ⚔️ --", "Parth Dhawan"])
+        st.session_state.character = choice
 
-          if not st.session_state.assessment_completed:
-            st.write("1️⃣ Assessing Physical Prowess")
-            bar1 = st.progress(0)
-            for i in range(100):
-                time.sleep(0.01)
-                bar1.progress(i + 1)
-            st.success("⚔️ Physical Prowess Assessed!")
+        if st.session_state.character != "-- Select Character ⚔️ --":
+            # --- Rank Config ---
+            
 
-            st.write("2️⃣ Analyzing Combat Skills")
-            bar2 = st.progress(0)
-            for i in range(100):
-                time.sleep(0.01)
-                bar2.progress(i + 1)
-            st.success("🎯 Combat Skills Analyzed!")
+            if not st.session_state.assessment_completed:
+              st.write("1️⃣ Assessing Physical Prowess")
+              bar1 = st.progress(0)
+              for i in range(100):
+                  time.sleep(0.01)
+                  bar1.progress(i + 1)
 
-            st.write("3️⃣ Calibrating Magical Aura")
-            bar3 = st.progress(0)
-            for i in range(100):
-                time.sleep(0.01)
-                bar3.progress(i + 1)
-            st.success("🌌 Magical Aura Calibrated!")
+              st.write("2️⃣ Analyzing Combat Skills")
+              bar2 = st.progress(0)
+              for i in range(100):
+                  time.sleep(0.01)
+                  bar2.progress(i + 1)
 
-            st.write("✅ All systems complete. Your Hunter rank has been updated!")
-            st.session_state.assessment_completed = True
-            st.session_state.disable_button = True  # Disable button after click 
-            with st.spinner("Please wait..."):
-              time.sleep(5)
-            st.rerun()
+              st.write("3️⃣ Calibrating Magical Aura")
+              bar3 = st.progress(0)
+              for i in range(100):
+                  time.sleep(0.01)
+                  bar3.progress(i + 1)
+
+              st.write("✅ All systems complete. Your Hunter rank has been updated!")
+              st.session_state.assessment_completed = True
+              st.session_state.disable_button = True  # Disable button after click 
+              with st.spinner("Please wait..."):
+                time.sleep(5)
+              st.rerun()
 else:
 
   
@@ -168,7 +177,7 @@ else:
       )
 
   slides_html = "\n".join(slide_blocks)
-
+  st.audio("sounds/bg_sound.mp3", format="audio/mp3", start_time=0, autoplay=True, loop=True)
   carousel_html = f"""
   <link
     rel="stylesheet"
@@ -203,7 +212,11 @@ else:
       border-radius: 90px;
       object-fit: cover;
       transition: transform 0.3s ease, filter 0.3s ease;
-      filter: grayscale(80%) brightness(60%);
+      
+    }}
+
+    .slide-content img.grayscale {{
+    filter: grayscale(100%) brightness(60%);
     }}
 
     /* ── LABEL UNDER IMAGE ── */
@@ -283,12 +296,17 @@ else:
   """
 
 
-
-
+  col1, col2 = st.columns([1.2, 9])
+  with col1:
+    if st.button("<- Back", type="primary", use_container_width=True):
+      st.session_state.taking_assessment = False
+      st.session_state.assessment_completed = False
+      st.session_state.disable_button = False
+      st.session_state.character = None
+      st.rerun()
     
   # Display Rank & Image
   st.markdown(f"### Current Rank: **{st.session_state.current_rank }**")
-
 
     # ─── 3) RENDER THE CAROUSEL ─────────────────────────────────────────────────
   components.html(carousel_html, height=300)
@@ -301,3 +319,195 @@ else:
   # st.info("Be disciplined, focused, and never give up!")
   # st.info("Just like Sung Jinwoo, every practice session makes you stronger!")
   st.info("Congratulations Hunter, You are not the weakest now!")
+
+if(st.session_state.fighting == False):
+  if st.button("Fight Magical Beasts! ⚔️", key="fight_beasts", type="secondary", disabled=st.session_state.disable_button):
+      st.audio("sounds/bg_sound.mp3", format="audio/mp3", start_time=0, autoplay=True, loop=True)
+      st.session_state.fighting = True
+      st.rerun()
+
+else:      
+    if st.session_state.fighting:
+      st.audio("sounds/bg_sound.mp3", format="audio/mp3", start_time=0, autoplay=True, loop=True)
+      col1, col2 = st.columns([1.2, 9])
+      with col1:
+        if st.button("<- Back", type="primary", use_container_width=True):
+          st.session_state.fighting = False
+          st.rerun()
+      st.subheader("⚔️ Fight Magical Beasts!")
+      st.info("Prepare for battle, Hunter!")
+      custom_labels = {
+      "igris.png":      "Igris the Bloodred", 
+      "bwkaisel.png": "Kaisel",
+      "bwtusk.png":      "Tusk",
+      "bwberu.png": "Ant King Beru",
+      "bwstatue_of_god.png": "Statue of God",
+
+      }
+
+      # We explicitly list them in the order we want to appear:
+      filenames_in_order = [
+          "igris.png",
+          "bwkaisel.png",
+          "bwtusk.png",
+          "bwberu.png",
+          "bwstatue_of_god.png",
+      ]
+
+      # Verify they exist on disk / warn if missing
+      IMAGES_DIR = "villains"
+      missing = [fn for fn in filenames_in_order if not os.path.isfile(os.path.join(IMAGES_DIR, fn))]
+      if missing:
+          st.error(f"The following files were not found in `{IMAGES_DIR}/`: {missing}")
+          st.stop()
+
+      # Build two parallel lists: one for data‐URIs, one for labels
+      image_data_uris = []
+      labels = []
+
+
+      for fname in filenames_in_order:
+          full_path = os.path.join(IMAGES_DIR, fname)
+          # 1A) Read and base64‐encode
+          with open(full_path, "rb") as f:
+              raw = f.read()
+          b64 = base64.b64encode(raw).decode("utf-8")
+          data_uri = f"data:image/png;base64,{b64}"
+          image_data_uris.append(data_uri)
+          # 1B) Fetch the custom label from our dict (must exist)
+          labels.append(custom_labels[fname])
+
+      # ─── 2) BUILD HTML SLIDES (IMG + CUSTOM LABEL) ──────────────────────────────
+      slide_blocks = []
+      for uri, lbl in zip(image_data_uris, labels):
+          slide_blocks.append(
+              f"""
+              <div class="swiper-slide">
+                <div class="slide-content">
+                  <img src="{uri}" />
+                  <div class="caption">{lbl}</div>
+                </div>
+              </div>
+              """
+          )
+
+      slides_html = "\n".join(slide_blocks)
+
+      carousel_html = f"""
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+      />
+
+      <style>
+        /* ── CONTAINER ── */
+        .swiper {{
+          width: 100%;
+          padding-top: 50px;
+          padding-bottom: 50px;
+        }}
+
+        /* ── EACH SLIDE (wrapper) ── */
+        .swiper-slide {{
+          background: none;
+          width: 200px;
+        }}
+
+        /* ── INNER CONTENT (image + label) ── */
+        .slide-content {{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }}
+
+        /* ── IMAGE (circle) ── */
+        .slide-content img {{
+          width: 180px;
+          height: 250px;
+          border-radius: 0px;
+          object-fit: cover;
+          transition: transform 0.3s ease, filter 0.3s ease;
+          filter: grayscale(80%) brightness(60%);
+        }}
+
+        /* ── LABEL UNDER IMAGE ── */
+        .slide-content .caption {{
+          margin-top: 0px;
+          font-size: 15px;
+          color: #000;
+          text-align: center;
+          border: 2px solid #000;
+          padding: 4px 8px;
+          border-radius: 4px;
+          display: inline-block;
+          background-color: rgba(255, 255, 255, 0.4);
+          z-index: 10;
+        }}
+
+        /* ── ACTIVE (center) SLIDE IMAGE ── */
+        .swiper-slide-active .slide-content img {{
+          filter: none;
+          transform: scale(1.5);
+          z-index: 2;
+        }}
+
+        /* ── NAVIGATION ARROWS ── */
+        .swiper-button-next,
+        .swiper-button-prev {{
+          color: #fff;
+          width: 44px;
+          height: 44px;
+        }}
+        .swiper-button-next::after,
+        .swiper-button-prev::after {{
+          font-size: 1.5rem;
+        }}
+
+        /* ── DISABLED “Prev” STATE ── */
+        .swiper-button-prev.disabled {{
+          opacity: 0.3;
+          pointer-events: none;
+        }}
+      </style>
+
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          {slides_html}
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+      <script>
+        const swiper = new Swiper('.swiper', {{
+
+          effect: 'coverflow',
+          grabCursor: true,
+          centeredSlides: true,
+          slidesPerView: 'auto',
+                // start with the first slide
+          loop: false,                  // do not loop so there's a real first slide
+          allowSlidePrev: true,        // disable left-swipe on first slide
+          coverflowEffect: {{
+            rotate: 30,
+            stretch: 0,
+            depth: 150,
+            modifier: 1.5,
+            slideShadows: true,
+          }},
+          navigation: {{
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          }},
+
+        }});
+
+      </script>
+      """
+
+
+        # ─── 3) RENDER THE CAROUSEL ─────────────────────────────────────────────────
+      components.html(carousel_html, height=370)
+
+      st.link_button("Fight Igris!", "https://docs.google.com/forms/d/e/1FAIpQLScruI6dLKQfjFZBW74zSxGzIJf02l5y3Ad4xxzyiquZNCDeWQ/viewform?usp=sharing&ouid=103378373732941400486", use_container_width=True, icon="🗡️", type="primary")
